@@ -1,13 +1,29 @@
-name: Post welcome comment
+name: Step 3, Add actions
+
+# This step triggers after every push to emoji-workflow
+# This step sets STEP to 4
+# This step closes <details id=3> and opens <details id=4>
+
+# This will run every time we push to emoji-workflow
+# Reference https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows
 on:
-  pull_request:
-    types: [opened]
+  workflow_dispatch:
+  push:
+    branches:
+      - welcome-workflow
+
+# Reference https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+permissions:
+  # Need `contents: read` to checkout the repository
+  # Need `contents: write` to update the step metadata
+  contents: write
+
 jobs:
   build:
     name: Post welcome comment
     runs-on: ubuntu-latest
     steps:
-      - run: gh pr comment $PR_URL --body "Welcome to the repository!"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+      - run: gh pr comment $PR_URL --body "Welcome to the respitory!"
+    env:
+      GITHUB_TOKEN: s{{ secrets.GITHUB_TOKEN }}
+      PR_URL: ${{ github.event.pull_request.html_url }}  
